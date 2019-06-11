@@ -1,5 +1,8 @@
 require 'watir'
 
+require_relative 'account'
+require_relative 'accounts'
+
 class Crawler
   URL = "https://my.fibank.bg/oauth2-server/login?client_id=E_BANK"
 
@@ -31,7 +34,8 @@ class Crawler
   end
 
   def print_accounts
-    account_details = []
+    account_details = Accounts.new
+
     accounts_table = @browser.table(id: "dashboardAccounts").wait_until(&:present?).tbody
     accounts_table.rows.each do |r|
       r.wait_until(&:present?).link.click
@@ -44,12 +48,9 @@ class Crawler
       @browser.back
       @browser.table(id: "dashboardAccounts").wait_until(&:present?)
 
-      account_details <<
-      {
-        name: info['Титуляр:'], currency: info['Валута:'], balance: balance,
-        nature: info['Вид:']
-      }
+      account_details << Account.new(info['Титуляр:'], balance, info['Валута:'], info['Вид:'])
     end
+    puts
     puts account_details
   end
 end
