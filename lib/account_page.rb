@@ -1,3 +1,5 @@
+require 'nokogiri'
+
 class AccountPage
   def initialize(browser)
     @browser = browser
@@ -5,10 +7,13 @@ class AccountPage
   end
 
   def fetch_account_into(name, container)
-    account_info = @browser.div(css: '.acc-info')
-    account_info.wait_until(&:present?)
-    info = account_info.dl.to_hash
-    balance = @browser.div(css: '.acc-bal-directive').h3s[0].text
-    container << Account.new(name, balance, info['Валута:'], info['Вид:'])
+    @browser.div(css: '.acc-info').wait_until(&:present?)
+
+    html = Nokogiri::HTML(@browser.html)
+    account_info = html.css('div.acc-info dl dd')
+    balance, currency = html.at_css('.acc-bal-directive h3').content.split
+    balance = balance.to_f
+    nature = account_info[4].content
+    container << Account.new(name, balance, currency, nature)
   end
 end
