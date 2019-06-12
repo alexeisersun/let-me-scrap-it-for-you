@@ -19,4 +19,13 @@ class DashboardPage
     end
   end
 
+  def fetch_transactions(&block)
+    link = @browser.link(css: 'div#dashStep4 #step3')
+    link.wait_until(&:present?)
+    sleep(1)
+    link.click
+    block.call
+    @browser.back
+  end
+
 end
