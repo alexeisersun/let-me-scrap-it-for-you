@@ -65,7 +65,6 @@ class Crawler
     sleep(1)
     link.click
 
-
     date_from = @browser.div(css: '.acc-statement .controls div', name: 'FromDate')
     date_from.wait_until(&:present?)
     date_from.text_field.set start_date
@@ -97,7 +96,7 @@ class Crawler
         account_statements = @browser.table(id: 'accountStatements')
         account_statements.wait_until(timeout: 3, &:present?)
         account_statements.tbody.rows.each { |row|
-          date = Date.parse(row[0].text)
+          date = DateTime.parse(row[0].text).iso8601
           description = row[4].text
           amount = row[2].text.to_i + row[3].text.to_i
           transactions << Transaction.new(date, description, amount)
