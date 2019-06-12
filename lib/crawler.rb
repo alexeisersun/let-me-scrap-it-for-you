@@ -5,6 +5,7 @@ require_relative 'accounts'
 require_relative 'transaction'
 require_relative 'transactions'
 require_relative 'login_page'
+require_relative 'dashboard_page'
 
 class Crawler
   URL = "https://my.fibank.bg/oauth2-server/login?client_id=E_BANK"
@@ -16,33 +17,13 @@ class Crawler
 
   def run
     LoginPage.new(@browser, URL).login
-    fetch_accounts
+    DashboardPage.new(@browser, dashboard_url, @accounts).fetch_accounts
     fetch_transactions(from_date: '12/04/2019', to_date: '12/06/2019')
     close
   end
 
   def close
     @browser.close
-  end
-
-  def fetch_accounts
-    accounts_table = @browser.table(id: "dashboardAccounts")
-    accounts_table.wait_until(&:present?)
-    accounts_table = accounts_table.tbody
-    accounts_table.rows.each do |r|
-      r.wait_until(&:present?).link.click
-      account_info = @browser.div(css: '.acc-info')
-      account_info.wait_until(&:present?)
-      fields = [:branch, :currency, :owner, :role, :category]
-      info = account_info.dl.to_hash
-
-      balance = @browser.div(css: '.acc-bal-directive').h3s[0].text
-
-      @browser.back
-      @browser.table(id: "dashboardAccounts").wait_until(&:present?)
-
-      @accounts << Account.new(r.link.text, balance, info['Валута:'], info['Вид:'])
-    end
   end
 
   def fetch_transactions(from_date: Date.today.to_s , to_date: Date.today.to_s)
