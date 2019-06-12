@@ -6,6 +6,8 @@ require_relative 'transaction'
 require_relative 'transactions'
 require_relative 'login_page'
 require_relative 'dashboard_page'
+require_relative 'account_page'
+
 
 class Crawler
   URL = "https://my.fibank.bg/oauth2-server/login?client_id=E_BANK"
@@ -17,7 +19,10 @@ class Crawler
 
   def run
     LoginPage.new(@browser, URL).login
-    DashboardPage.new(@browser, dashboard_url, @accounts).fetch_accounts
+    DashboardPage.new(@browser).fetch_accounts { |name|
+      AccountPage.new(@browser).fetch_account_into(name, @accounts)
+    }
+    
     fetch_transactions(from_date: '12/04/2019', to_date: '12/06/2019')
     close
   end
