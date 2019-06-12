@@ -9,6 +9,10 @@ class Accounts
     @accounts << value
   end
 
+  def [](key)
+    @accounts.find {|a| a.name == key }
+  end
+
   def to_hash
     {accounts: @accounts}
   end

@@ -10,6 +10,7 @@ class Crawler
 
   def initialize(browser: nil)
     @browser = browser
+    @accounts = Accounts.new
   end
 
   def run
@@ -37,8 +38,6 @@ class Crawler
   end
 
   def print_accounts
-    account_details = Accounts.new
-
     accounts_table = @browser.table(id: "dashboardAccounts")
     accounts_table.wait_until(&:present?)
     accounts_table = accounts_table.tbody
@@ -54,15 +53,13 @@ class Crawler
       @browser.back
       @browser.table(id: "dashboardAccounts").wait_until(&:present?)
 
-      account_details << Account.new(info['Титуляр:'], balance, info['Валута:'], info['Вид:'])
+      @accounts << Account.new(r.link.text, balance, info['Валута:'], info['Вид:'])
     end
     puts
-    puts account_details
+    puts @accounts
   end
 
   def print_transactions(start_date, end_date)
-    transactions = Transactions.new
-
     link = @browser.link(css: 'div#dashStep4 #step3').wait_until(&:present?)
     link.wait_until(&:present?)
     sleep(1)
@@ -88,8 +85,10 @@ class Crawler
     option = account_picker.ul
     option.wait_until(&:present?)
     option.list_items.each{  |i|
-      i.link.click
+      account_name, _ = i.link.text.split
+      transactions = @accounts[account_name].transactions
 
+      i.link.click
       show_btn = @browser.button(id: 'button')
       show_btn.wait_until(&:present?)
       show_btn.click
@@ -109,6 +108,6 @@ class Crawler
       sleep(3)
       btn.click
     }
-  puts transactions
+    puts @accounts.to_hash
   end
 end
