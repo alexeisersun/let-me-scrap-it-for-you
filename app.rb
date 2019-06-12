@@ -3,5 +3,5 @@ puts "Let me crawl it for you."
 
 require_relative 'lib/crawler'
 
-crawler = Crawler.new(browser: :firefox)
+crawler = Crawler.new
 crawler.run

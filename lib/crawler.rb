@@ -8,36 +8,34 @@ require_relative 'transactions'
 class Crawler
   URL = "https://my.fibank.bg/oauth2-server/login?client_id=E_BANK"
 
-  def initialize(browser: nil)
-    @browser = browser
+  def initialize(browser: :firefox)
     @accounts = Accounts.new
+    @browser = Watir::Browser.new browser
   end
 
   def run
     open
-    pass_login
-    print_accounts
-    print_transactions('12/04/2019', '12/06/2019')
+    login
+    fetch_accounts
+    fetch_transactions(from_date: '12/04/2019', to_date: '12/06/2019')
     close
   end
 
   private
 
   def open
-    @browser = Watir::Browser.new @browser
     @browser.goto URL
   end
 
-  def pass_login
-    demo_link = @browser.link(css: "#demo-link").wait_until(&:present?)
-    demo_link.click
+  def login
+    @browser.link(css: "#demo-link").wait_until(&:present?).click
   end
 
   def close
     @browser.close
   end
 
-  def print_accounts
+  def fetch_accounts
     accounts_table = @browser.table(id: "dashboardAccounts")
     accounts_table.wait_until(&:present?)
     accounts_table = accounts_table.tbody
@@ -59,7 +57,7 @@ class Crawler
     puts @accounts
   end
 
-  def print_transactions(start_date, end_date)
+  def fetch_transactions(from_date: Date.today.to_s , to_date: Date.today.to_s)
     link = @browser.link(css: 'div#dashStep4 #step3').wait_until(&:present?)
     link.wait_until(&:present?)
     sleep(1)
@@ -67,11 +65,11 @@ class Crawler
 
     date_from = @browser.div(css: '.acc-statement .controls div', name: 'FromDate')
     date_from.wait_until(&:present?)
-    date_from.text_field.set start_date
+    date_from.text_field.set from_date
 
     date_to = @browser.div(css: '.acc-statement .controls div', name: 'ToDate')
     date_to.wait_until(&:present?)
-    date_to.text_field.set end_date
+    date_to.text_field.set to_date
 
     account_picker = @browser.div(css: '.acc-statement .controls div', name: 'Iban')
     account_picker.wait_until(&:present?)
