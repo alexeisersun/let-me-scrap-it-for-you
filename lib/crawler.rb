@@ -33,7 +33,7 @@ class Crawler
     }
 
     puts @accounts
-    
+
     close
   end
 
