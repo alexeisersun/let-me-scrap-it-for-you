@@ -30,6 +30,7 @@ PLATFORMS
 
 DEPENDENCIES
   geckodriver-helper
+  nokogiri
   watir
   webdrivers (~> 4.0)
 
