@@ -3,7 +3,7 @@ class StatementPage
     @browser = browser
   end
 
-  def fetch_transactions(container, from_date: Date.today.to_s , to_date: Date.today.to_s)
+  def fetch_transactions_into(container, from_date: Date.today.strftime('%Y/%m/%d') , to_date: Date.today.strftime('%Y/%m/%d'))
     date_from = @browser.div(css: '.acc-statement .controls div', name: 'FromDate')
     date_from.wait_until(&:present?)
     date_from.text_field.set from_date
