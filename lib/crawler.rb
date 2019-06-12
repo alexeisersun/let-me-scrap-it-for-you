@@ -4,6 +4,7 @@ require_relative 'account'
 require_relative 'accounts'
 require_relative 'transaction'
 require_relative 'transactions'
+require_relative 'login_page'
 
 class Crawler
   URL = "https://my.fibank.bg/oauth2-server/login?client_id=E_BANK"
@@ -14,21 +15,10 @@ class Crawler
   end
 
   def run
-    open
-    login
+    LoginPage.new(@browser, URL).login
     fetch_accounts
     fetch_transactions(from_date: '12/04/2019', to_date: '12/06/2019')
     close
-  end
-
-  private
-
-  def open
-    @browser.goto URL
-  end
-
-  def login
-    @browser.link(css: "#demo-link").wait_until(&:present?).click
   end
 
   def close
@@ -53,8 +43,6 @@ class Crawler
 
       @accounts << Account.new(r.link.text, balance, info['Валута:'], info['Вид:'])
     end
-    puts
-    puts @accounts
   end
 
   def fetch_transactions(from_date: Date.today.to_s , to_date: Date.today.to_s)
