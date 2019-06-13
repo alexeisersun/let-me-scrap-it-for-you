@@ -19,7 +19,7 @@ class Accounts
   end
 
   def to_hash
-    { accounts: @accounts }
+    { accounts: @accounts.map { |e| e.to_hash } }
   end
 
   def to_s

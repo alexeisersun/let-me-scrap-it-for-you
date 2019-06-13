@@ -22,7 +22,7 @@ class Account
   def to_hash
     {
       name: @name, balance: @balance, currency: @currency, nature: @nature,
-      transactions: @transactions
+      transactions: @transactions.to_hash
     }
   end
 end
