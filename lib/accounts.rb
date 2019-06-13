@@ -1,6 +1,11 @@
+# frozen_string_literal: true
+
+# Container for multiple accounts.
+# Under the hood it uses Array for storing accounts.
+#
 class Accounts
   attr_reader :accounts
-  
+
   def initialize
     @accounts = []
   end
@@ -10,16 +15,14 @@ class Accounts
   end
 
   def [](key)
-    @accounts.find {|a| a.name == key }
+    @accounts.find { |a| a.name == key }
   end
 
   def to_hash
-    {accounts: @accounts}
+    { accounts: @accounts }
   end
 
   def to_s
-      @accounts.reduce("Accounts:\n") { |mem, a|
-        mem + a.to_s + "\n"
-      }
+    @accounts.reduce("Accounts:\n") { |mem, a| mem + a.to_s + "\n" }
   end
 end

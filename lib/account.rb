@@ -1,5 +1,9 @@
+# frozen_string_literal: true
+
 require_relative 'transactions'
 
+# Stores data related to a single account.
+#
 class Account
   attr_reader :name, :balance, :currency, :nature, :transactions
 
@@ -21,5 +25,4 @@ class Account
       transactions: @transactions
     }
   end
-
 end

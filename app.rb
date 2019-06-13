@@ -1,5 +1,7 @@
-at_exit { puts "I crawled it for you. <3" }
-puts "Let me crawl it for you."
+# frozen_string_literal: true
+
+at_exit { puts 'I crawled it for you. <3' }
+puts 'Let me crawl it for you.'
 
 require_relative 'lib/crawler'
 
