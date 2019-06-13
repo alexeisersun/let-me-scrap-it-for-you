@@ -13,7 +13,7 @@ require_relative 'statement_page'
 
 # Operate over a bank account.
 #
-class Crawler
+class Scraper
   URL = 'https://my.fibank.bg/oauth2-server/login?client_id=E_BANK'
 
   def initialize(browser: :firefox)

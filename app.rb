@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-at_exit { puts 'I crawled it for you. <3' }
-puts 'Let me crawl it for you.'
+at_exit { puts 'I scraped it for you. <3' }
+puts 'Let me scrap it for you.'
 
-require_relative 'lib/crawler'
+require_relative 'lib/scraper'
 
-crawler = Crawler.new
-crawler.run
+scraper = Scraper.new
+scraper.run
