@@ -1,6 +1,9 @@
 require_relative 'account'
+require_relative 'safe_scrapper'
 
 class DashboardPage
+  include SafeScrapper
+
   def initialize(browser)
     @browser = browser
     self
@@ -10,25 +13,25 @@ class DashboardPage
     accounts_dashboard.tbody.rows.each do |r|
       link = r.link.text
       r.wait_until(&:present?).link.click
-      block.call(link)
+      block.call link
       back
       accounts_dashboard
     end
   end
 
   def fetch_transactions(&block)
-    transactions_dashboard.click
+    safe_click_on transactions_dashboard
     block.call
     back
   end
 
   private
   def accounts_dashboard
-    @browser.table(id: "dashboardAccounts").wait_until(&:present?)
+    wait @browser.table(id: "dashboardAccounts")
   end
 
   def transactions_dashboard
-    @browser.link(css: 'div#dashStep4 #step3').wait_until(&:present?)
+    @browser.link(css: 'div#dashStep4 #step3')
   end
 
   def back
