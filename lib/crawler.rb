@@ -27,13 +27,13 @@ class Crawler
     }
 
     dashboard.fetch_transactions {
-      two_months_ago = (Date.today - 60).strftime('%Y/%m/%d')
-      today = Date.today.strftime('%Y/%m/%d')
+      two_months_ago = (Date.today - 60).strftime('%d/%m/%Y')
+      today = Date.today.strftime('%d/%m/%Y')
       StatementPage.new(@browser).fetch_transactions_into(@accounts, from_date: two_months_ago, to_date: today)
     }
 
     puts @accounts
-    
+
     close
   end
 
