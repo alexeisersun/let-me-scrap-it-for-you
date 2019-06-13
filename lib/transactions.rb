@@ -15,7 +15,7 @@ class Transactions
   end
 
   def to_hash
-    @transactions.map { |e| e.to_hash }
+    @transactions.map(&:to_hash)
   end
 
   def to_s
