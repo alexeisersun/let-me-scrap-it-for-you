@@ -1,8 +1,13 @@
 # Let me scrap it for you, in the bank
 
-## Prerequires
+## Installation
 
-Run `bundle install` in the project's directory to install required gems.
+Clone the repo and install project's dependencies:
+```
+git clone git@github.com:alexeisersun/let-me-scrap-it-for-you.git
+cd let-me-scrap-it-for-you
+bundle install
+```
 
 ## Usage
 
